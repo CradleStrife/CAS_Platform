@@ -1,3 +1,6 @@
+#中科院原项目github链接：（此处仅为我自己的workspace）
+https://github.com/lijutang/CA-Materials-Computing-Platform
+
 #使用框架
 	Frontend：vue3 +JavaScript+Vite；
 	Backend：Flask+ SQLite + Axios； 
