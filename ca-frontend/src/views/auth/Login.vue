@@ -6,33 +6,87 @@
     <!-- 登录面板 -->
     <div class="login-panel">
       <h1 class="login-title">Log in</h1>
-      <LoginForm @submit="handleLogin" @forgot-password="handleForgotPassword" @sign-up="handleSignUp" />
+      <form @submit.prevent="handleLogin">
+        <div class="input-group">
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            v-model="formData.username"
+            placeholder="Enter your username"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            v-model="formData.password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button type="submit" class="submit-button">Log in</button>
+      </form>
+      <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+      <div class="links">
+        <span class="link" @click="handleForgotPassword">Forgot Password?</span>
+        <span class="link" @click="handleSignUp">Sign Up</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import LoginForm from '@/components/auth/LoginForm.vue'
-import { useRouter } from 'vue-router' // 引入 useRouter
+import { ref } from "vue"; // Vue 的响应式变量
+import { useRouter } from "vue-router"; // 引入路由实例
+import axios from "axios"; // 引入 axios
 
-const router = useRouter() // 创建路由实例
+const router = useRouter(); // 创建路由实例
 
-const handleLogin = (formData) => {
-  if (formData.username === 'user' && formData.password === 'password123') {
-    console.log('Login successful')
-    router.push('/home') // 跳转到首页
-  } else {
-    alert('Invalid username or password')
+// 定义表单数据和错误信息
+const formData = ref({
+  username: "",
+  password: "",
+});
+const errorMessage = ref("");
+
+// 登录处理函数
+const handleLogin = async () => {
+  try {
+    // 调用后端 API 进行登录验证
+    const response = await axios.post("http://127.0.0.1:5000/api/login", {
+      username: formData.value.username,
+      password: formData.value.password,
+    });
+
+    if (response.data.message === "Login successful!") {
+      console.log("Login successful");
+      sessionStorage.setItem("username", formData.value.username); // 保存登录状态
+      router.push("/home"); // 跳转到主页
+    } else {
+      errorMessage.value = response.data.message; // 显示后端返回的错误信息
+    }
+  } catch (error) {
+    // 捕获错误并处理
+    if (error.response && error.response.data) {
+      errorMessage.value = error.response.data.message; // 后端返回的错误信息
+    } else {
+      errorMessage.value = "Unable to connect to the server."; // 连接失败
+    }
   }
-}
+};
 
+// 忘记密码处理函数
 const handleForgotPassword = () => {
-  console.log('Forgot password clicked')
-}
+  console.log("Forgot password clicked");
+};
 
+// 跳转到注册页面
 const handleSignUp = () => {
-  router.push('/register') // 跳转到注册页面
-}
+  router.push("/register");
+};
 </script>
 
 <style scoped>
@@ -75,7 +129,7 @@ body {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #0e0a0a;
 }
 
 .input-group {
@@ -87,7 +141,7 @@ body {
   height: 50px;
   padding: 10px;
   background-color: #f8fafb;
-  border: 1px solid #dcdcdc;
+  border: 1px solid #050404;
   border-radius: 25px;
   outline: none;
   transition: border-color 0.3s ease;
@@ -130,5 +184,12 @@ body {
 
 .link:hover {
   color: #45a89e;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
 }
 </style>

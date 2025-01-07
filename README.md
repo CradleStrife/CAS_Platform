@@ -4,4 +4,5 @@
             npm run dev
             启动后端：
             cd ca-backend
-            npm run dev
+            venv\Scripts\activate.bat
+            python app.py

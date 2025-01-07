@@ -35,8 +35,7 @@
           class="clear-icon"
           v-if="confirmPassword"
           @click="confirmPassword = ''"
-          >✖</span
-        >
+        >✖</span>
       </div>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -47,28 +46,58 @@
 </template>
 
 <script>
+import axios from "axios"; // 引入 Axios 以发送 HTTP 请求
+
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      confirmPassword: '',
-      errorMessage: '',
+      username: "",
+      password: "",
+      confirmPassword: "",
+      errorMessage: "",
     };
   },
-  methods: {
-    handleRegister() {
-      if (!this.username || !this.password) {
-        this.errorMessage = 'Please fill in all fields.';
+    methods: {
+    async handleRegister() {
+      // 表单验证
+      if (!this.username || !this.username.trim()) {
+        this.errorMessage = "Username cannot be empty.";
+        return;
+      }
+      if (!this.password || !this.password.trim()) {
+        this.errorMessage = "Password cannot be empty.";
         return;
       }
       if (this.password !== this.confirmPassword) {
-        this.errorMessage = 'Passwords do not match.';
+        this.errorMessage = "Passwords do not match.";
         return;
       }
-      // 模拟注册逻辑
-      sessionStorage.setItem('registered', 'true'); // 在 sessionStorage 中保存注册状态
-      this.$router.push('/register/success');
+
+      try {
+        console.log("Sending data to backend:", {
+          username: this.username,
+          password: this.password,
+        });
+
+        // 调用后端 API 完成注册
+        const response = await axios.post("http://localhost:5000/api/register", {
+          username: this.username.trim(),
+          password: this.password.trim(),
+        });
+
+        // 注册成功
+        if (response.data.message === "User registered successfully!") {
+          this.$router.push("/register/success"); // 跳转到成功页面
+        }
+      } catch (error) {
+        // 错误处理
+        console.error("Error from backend:", error.response ? error.response.data : error.message);
+        if (error.response && error.response.data) {
+          this.errorMessage = error.response.data.message; // 显示后端返回的错误信息
+        } else {
+          this.errorMessage = "Failed to connect to the server."; // 网络或服务器错误
+        }
+      }
     },
   },
 };
