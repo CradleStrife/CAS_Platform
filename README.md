@@ -2,7 +2,8 @@
 https://github.com/lijutang/CA-Materials-Computing-Platform
 
 #使用框架
-	Frontend：vue3 +JavaScript+Vite；
+	
+ 	Frontend：vue3 +JavaScript+Vite；
 	Backend：Flask+ SQLite + Axios； 
 
 
@@ -38,7 +39,8 @@ https://github.com/lijutang/CA-Materials-Computing-Platform
 
 
 # 关于账号密码
-	备注：如果想查看账号密码：信息是存储在/ca-backend/instance/site.db文件里面的
+	备注：如果想查看本地账号密码：信息是存储在/ca-backend/instance/site.db文件里面的
+ 	（小声：后续与项目组跟进会考虑使用firebase或者其他云存储工具实现用户数据远端云存储）
 	想要查看要开启一个新的终端
 	cd ca-backend
 	打开Sqlite
