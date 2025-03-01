@@ -1,6 +1,7 @@
 ### Now is only a Beta version
-#中科院原项目github链接：（此处仅为我自己的workspace）
+#中科院原项目github链接：（此处仅为我自己的workspace）/ Link to the original CAS project github: (this is my own workspace only)：
 https://github.com/lijutang/CA-Materials-Computing-Platform
+（My branch is VueNewest Branch)
 
 #使用框架
 	
