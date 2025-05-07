@@ -1,4 +1,4 @@
-// views/Template_1.vue
+<!-- // views/Template_1.vue
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/BaseLayout.vue'
 </script>
@@ -7,4 +7,4 @@ import BaseLayout from '@/components/layout/BaseLayout.vue'
   <BaseLayout default-active="manipulate">
     <router-view />
   </BaseLayout>
-</template>
+</template> -->

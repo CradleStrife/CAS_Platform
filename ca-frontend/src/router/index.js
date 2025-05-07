@@ -25,6 +25,8 @@ import XML from "@/views/manipulate/XML.vue";
 import Figure from "@/views/manipulate/Figure.vue";
 import Vis from "@/views/manipulate/Vis.vue";
 
+import ForgotPassword from '@/views/auth/ForgotPassword.vue';
+
 // 定义路由
 const routes = [
   {
@@ -57,6 +59,11 @@ const routes = [
     name: "InformationCenter",
     component: InformationCenter,
   },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword
+  },
   //新添加的子菜单路由
     // Manipulate 子菜单
     { path: "/manipulate/results", component: Results },
@@ -83,13 +90,23 @@ const router = createRouter({
   routes
 })
 
+
 // 全局导航守卫
 router.beforeEach((to, from, next) => {
+  console.log('Global navigation guard:', {
+    to: to.path,
+    from: from.path,
+    meta: to.meta,
+    registered: sessionStorage.getItem('registered')
+  });
+  
   // 如果目标路由需要注册验证
   if (to.meta.requiresRegister && !sessionStorage.getItem('registered')) {
+    console.log('Blocking navigation - no registration status')
     // 未完成注册时，重定向到注册页面
     next('/register')
   } else {
+    console.log('Allowing navigation')
     // 允许访问目标页面
     next()
   }

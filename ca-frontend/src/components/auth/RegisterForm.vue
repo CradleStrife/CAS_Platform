@@ -57,8 +57,15 @@ export default {
       errorMessage: "",
     };
   },
-    methods: {
+  mounted() {
+    console.log("RegisterForm mounted");
+    console.log("Current route:", this.$route.path);
+    console.log("Router instance:", this.$router);
+  },
+  methods: {
     async handleRegister() {
+      console.log("=== Register Process Started ===");
+      
       // 表单验证
       if (!this.username || !this.username.trim()) {
         this.errorMessage = "Username cannot be empty.";
@@ -76,7 +83,7 @@ export default {
       try {
         console.log("Sending data to backend:", {
           username: this.username,
-          password: this.password,
+          password: "***",
         });
 
         // 调用后端 API 完成注册
@@ -85,12 +92,55 @@ export default {
           password: this.password.trim(),
         });
 
+        console.log("Full response:", response);
+        console.log("Response data:", response.data);
+        console.log("Response message:", response.data.message);
+
         // 注册成功
         if (response.data.message === "User registered successfully!") {
-          this.$router.push("/register/success"); // 跳转到成功页面
+          console.log("Registration successful!");
+          // 设置注册状态，解决路由守卫的问题
+          sessionStorage.setItem('registered', 'true');
+          console.log("Session storage set, registered:", sessionStorage.getItem('registered'));
+          console.log("Attempting to navigate to /login");
+          
+          // 添加一个小延迟以确保路由系统准备就绪
+          console.log("Current URL before navigation:", window.location.href);
+          console.log("Available routes:", this.$router.getRoutes());
+          
+          setTimeout(() => {
+            console.log("Executing navigation...");
+            console.log("Router instance exists:", !!this.$router);
+            console.log("Target route exists:", !!this.$router.resolve('/login').route);
+            
+            // 注册成功后跳转到登录页面
+            this.$router.push("/login")
+              .then(() => {
+                console.log("Navigation successful");
+                console.log("Current URL after navigation:", window.location.href);
+                console.log("Current route:", this.$route.path);
+              })
+              .catch((error) => {
+                console.error("Navigation error:", error);
+                console.log("Trying replace method...");
+                this.$router.replace("/login")
+                  .then(() => {
+                    console.log("Replace successful");
+                  })
+                  .catch((replaceError) => {
+                    console.error("Replace also failed:", replaceError);
+                    console.log("Falling back to window.location");
+                    window.location.href = "/login";
+                  });
+              });
+          }, 100);
+        } else {
+          console.log("Unexpected response message:", response.data.message);
+          this.errorMessage = "Unexpected response from server";
         }
       } catch (error) {
         // 错误处理
+        console.error("Full error object:", error);
         console.error("Error from backend:", error.response ? error.response.data : error.message);
         if (error.response && error.response.data) {
           this.errorMessage = error.response.data.message; // 显示后端返回的错误信息
@@ -98,6 +148,8 @@ export default {
           this.errorMessage = "Failed to connect to the server."; // 网络或服务器错误
         }
       }
+      
+      console.log("=== Register Process Ended ===");
     },
   },
 };

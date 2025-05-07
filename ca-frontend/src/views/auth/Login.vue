@@ -80,6 +80,7 @@ const handleLogin = async () => {
 
 // 忘记密码处理函数
 const handleForgotPassword = () => {
+  router.push('/forgot-password');
   console.log("Forgot password clicked");
 };
 
