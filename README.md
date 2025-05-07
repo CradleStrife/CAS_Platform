@@ -1,40 +1,68 @@
+CAS-Materials-Computing-Platform
+概要
+这是一款由中科院过程工程研究所小组开发的web应用。致力于搭建适用于国内的材料计算平台。目前项目在开发中。（这里展示的是我弄的能公开的基本框架）
+相关技术栈（框架）包括 Vue, JavaScript, Vite, Flask, and SQLite
+
 # 若是第一次启动（开发时笔记，可忽略）
 cd ca-backend
+
 python -m venv venv
+
 安装flask并输出依赖项
+
 pip install flask flask-cors flask-sqlalchemy
+
 pip freeze > requirements.txt
+
 然后启动后端
+
 python app.py
 
 
 再切换到前端
+
 cd .
+
 cd ca-frontend
+
 安装
+
 npm install axios
+
 然后启动前端
+
 npm run dev
 
 # 若不是首次启动
+
 确保当前终端位于当前项目根目录
 在当前终端，复制粘贴以下内容并输入
+
+
 cd ca-backend
+
 python -m venv venv
+
 python app.py
 
 然后重新开一个终端，复制粘贴一下内容并输入
+
+
 cd ca-frontend
+
 npm run dev
 
 
 # 关于账号密码
-如果想查看账号密码：信息是存储在/ca-backend/instance/site.db文件里面的
-（我们使用了SQLite）
-想要查看要
-开启一个新的终端
+如果想查看账号密码：信息是存储在/ca-backend/instance/site.db文件里面的（我们使用了SQLite）
+想要查看要开启一个新的终端
+
+
 cd ca-backend
+
+
 打开Sqlite
+
 sqlite3 instance/site.db  
 	
 	想要查询有哪些表输入：
